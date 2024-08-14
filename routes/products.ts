@@ -12,6 +12,7 @@ interface ProductReqBody {
 	ratings: number;
 }
 
+// create a product
 router.post(
 	"/",
 	async (req: Request<{}, {}, ProductReqBody>, res: Response) => {
@@ -19,12 +20,10 @@ router.post(
 			const newProduct = new ProductModel(req.body);
 			const product = await newProduct.save();
 			if (product?._id) {
-				return res
-					.status(201)
-					.send({
-						success: true,
-						message: `${product.title} is Saved Successfully!`,
-					});
+				return res.status(201).send({
+					success: true,
+					message: `${product.title} is Saved Successfully!`,
+				});
 			}
 		} catch (error) {
 			if (error instanceof Error) {
@@ -47,10 +46,11 @@ router.post(
 // dummy get route for products
 router.get("/", async (req: Request, res: Response) => {
 	try {
-		return res.status(200).send({
-			success: true,
-			message: "Hello from Products!",
-		});
+        const products = await ProductModel.find({});
+        
+        const productCount = await ProductModel.countDocuments();
+        
+		return res.status(200).send({ success: true, productCount, products });
 	} catch (error) {
 		if (error instanceof Error) {
 			console.error(error.message);
