@@ -1,0 +1,37 @@
+{
+	"name": "prodigy-picks-server",
+	"version": "1.0.0",
+	"description": "Server for Prodigy Picks :: Built with Express.js, Mongoose, and TypeScript, providing RESTful APIs for product management, filtering, sorting, and pagination.",
+	"main": "index.ts",
+	"scripts": {
+		"start": "nodemon index.ts"
+	},
+	"keywords": [
+		"prodigy-picks",
+		"eco-essentials",
+		"mongoose",
+		"express.js",
+		"node.js",
+		"typescript",
+		"rest",
+		"api",
+		"server"
+	],
+	"author": "NHB",
+	"license": "ISC",
+	"devDependencies": {
+		"@types/cors": "^2.8.17",
+		"@types/express": "^4.17.21",
+		"@types/mongoose": "^5.11.96",
+		"@types/node": "^22.2.0",
+		"nodemon": "^3.1.4",
+		"ts-node": "^10.9.2",
+		"typescript": "^5.5.4"
+	},
+	"dependencies": {
+		"cors": "^2.8.5",
+		"dotenv": "^16.4.5",
+		"express": "^4.19.2",
+		"mongoose": "^8.5.2"
+	}
+}
