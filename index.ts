@@ -3,6 +3,11 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { connectDB } from "./db/prodigyDB";
 import productRoutes from "./routes/products";
+import authRoutes from "./routes/auth";
+// import crypto from "node:crypto";
+
+// const secret = crypto.randomBytes(64).toString("hex");
+// console.log(secret);
 
 dotenv.config();
 
@@ -24,6 +29,7 @@ interface ErrorObject extends Error {
 		app.use(express.json());
 
 		// routes
+		app.use("/auth", authRoutes);
 		app.use("/products", productRoutes);
 
 		// root route

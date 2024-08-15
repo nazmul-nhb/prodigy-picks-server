@@ -27,7 +27,7 @@ router.post(
 			}
 		} catch (error) {
 			if (error instanceof Error) {
-				console.error(error.message);
+				console.error("Error Creating Product: ", error.message);
 				res.status(400).send({
 					success: false,
 					message: error.message,
@@ -53,7 +53,7 @@ router.get("/", async (req: Request, res: Response) => {
 		return res.status(200).send({ success: true, productCount, products });
 	} catch (error) {
 		if (error instanceof Error) {
-			console.error(error.message);
+			console.error("Error Getting Products: ", error.message);
 			res.status(400).send({
 				success: false,
 				message: error.message,
