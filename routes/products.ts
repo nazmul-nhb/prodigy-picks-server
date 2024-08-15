@@ -1,9 +1,9 @@
 import express, { Request, Response } from "express";
-import ProductModel from "../models/product";
+import ProductModel from "../models/Product";
 
 const router = express.Router();
 
-interface ProductReqBody {
+interface ProductDetails {
 	title: string;
 	image: string;
 	description: string;
@@ -15,7 +15,7 @@ interface ProductReqBody {
 // create a product
 router.post(
 	"/",
-	async (req: Request<{}, {}, ProductReqBody>, res: Response) => {
+	async (req: Request<{}, {}, ProductDetails>, res: Response) => {
 		try {
 			const newProduct = new ProductModel(req.body);
 			const product = await newProduct.save();

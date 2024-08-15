@@ -1,6 +1,6 @@
 import { Document, Schema, model } from "mongoose";
 
-// interface for the product
+// interface for product
 export interface Product extends Document {
 	title: string;
 	image: string;
@@ -12,8 +12,8 @@ export interface Product extends Document {
 	createdAt: Date;
 }
 
-// define the schema for the product
-const productSchema = new Schema<Product>({
+// define the schema for product
+export const productSchema = new Schema<Product>({
 	title: {
 		type: String,
 		required: [true, "Provide the product title!"],

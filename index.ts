@@ -2,8 +2,9 @@ import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { connectDB } from "./db/prodigyDB";
-import productRoutes from "./routes/products";
 import authRoutes from "./routes/auth";
+import userRoutes from "./routes/users";
+import productRoutes from "./routes/products";
 // import crypto from "node:crypto";
 
 // const secret = crypto.randomBytes(64).toString("hex");
@@ -30,6 +31,7 @@ interface ErrorObject extends Error {
 
 		// routes
 		app.use("/auth", authRoutes);
+		app.use("/users", userRoutes);
 		app.use("/products", productRoutes);
 
 		// root route
