@@ -8,6 +8,7 @@ interface ProductDetails {
 	image: string;
 	description: string;
 	price: number;
+	brand: string;
 	category: string;
 	ratings: number;
 }
@@ -53,7 +54,7 @@ router.get("/", async (req: Request, res: Response) => {
 		const skip = (page - 1) * size;
 
 		// Sorting
-		let sortBy: any = {};
+		let sortBy: Record<string, any> = {};
 		switch (req.query.sort) {
 			case "price_asc":
 				sortBy = { price: 1 };
@@ -72,7 +73,7 @@ router.get("/", async (req: Request, res: Response) => {
 		}
 
 		// Filter criteria
-		let filter: any = {};
+		let filter: Record<string, any> = {};
 
 		// Search by product name
 		if (req.query.search && typeof req.query.search === "string") {
@@ -103,7 +104,7 @@ router.get("/", async (req: Request, res: Response) => {
 			}
 		}
 
-		console.log(filter);
+		// console.log({sortBy, filter});
 
 		// Get filtered and sorted products with pagination
 		const products = await ProductModel.find(filter)
