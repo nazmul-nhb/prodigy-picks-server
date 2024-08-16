@@ -16,16 +16,31 @@ interface ProductDetails {
 // create a product
 router.post(
 	"/",
-	async (req: Request<{}, {}, ProductDetails>, res: Response) => {
+	async (
+		req: Request<{}, {}, ProductDetails | ProductDetails[]>,
+		res: Response
+	) => {
 		try {
-			const newProduct = new ProductModel(req.body);
-			const savedProduct = await newProduct.save();
-			if (savedProduct?._id) {
+			// Check if req.body is an array (for multiple products)
+			if (Array.isArray(req.body)) {
+				// Insert multiple products
+				const savedProducts = await ProductModel.insertMany(req.body);
 				return res.status(201).send({
 					success: true,
-					insertedId: savedProduct._id,
-					message: `${savedProduct.title} is Saved Successfully!`,
+					insertedIds: savedProducts.map((product) => product._id),
+					message: `${savedProducts.length} Products are Saved Successfully!`,
 				});
+			} else {
+				// Insert a single product
+				const newProduct = new ProductModel(req.body);
+				const savedProduct = await newProduct.save();
+				if (savedProduct?._id) {
+					return res.status(201).send({
+						success: true,
+						insertedId: savedProduct._id,
+						message: `${savedProduct.title} is Saved Successfully!`,
+					});
+				}
 			}
 		} catch (error) {
 			if (error instanceof Error) {
@@ -43,7 +58,7 @@ router.post(
 			}
 		}
 	}
-);
+);;
 
 // get route for all products
 router.get("/", async (req: Request, res: Response) => {
@@ -111,6 +126,7 @@ router.get("/", async (req: Request, res: Response) => {
 			.sort(sortBy)
 			.skip(skip)
 			.limit(size)
+			.select({ description: 0, __v: 0 })
 			.exec();
 
 		// Get total product count for pagination
