@@ -75,17 +75,20 @@ router.get("/", async (req: Request, res: Response) => {
 		let filter: any = {};
 
 		// Search by product name
-		if (req.query.search) {
-			filter.title = { $regex: req.query.search, $options: "i" };
+		if (req.query.search && typeof req.query.search === "string") {
+			const searchText = req.query.search.trim();
+			if (searchText.length) {
+				filter.title = { $regex: searchText, $options: "i" };
+			}
 		}
 
 		// Filter by brand
-		if (req.query.brand) {
+		if (req.query.brand && req.query.brand.length) {
 			filter.brand = req.query.brand;
 		}
 
 		// Filter by category
-		if (req.query.category) {
+		if (req.query.category && req.query.category.length) {
 			filter.category = req.query.category;
 		}
 
@@ -100,6 +103,8 @@ router.get("/", async (req: Request, res: Response) => {
 			}
 		}
 
+		console.log(filter);
+
 		// Get filtered and sorted products with pagination
 		const products = await ProductModel.find(filter)
 			.sort(sortBy)
@@ -110,17 +115,69 @@ router.get("/", async (req: Request, res: Response) => {
 		// Get total product count for pagination
 		const productCount = await ProductModel.countDocuments(filter);
 
-		return res
-			.status(200)
-			.send({
-				success: true,
-				productCount,
-				totalPages: Math.ceil(productCount / size),
-				products,
-			});
+		return res.status(200).send({
+			success: true,
+			productCount,
+			totalPages: Math.ceil(productCount / size),
+			products,
+		});
 	} catch (error) {
 		if (error instanceof Error) {
 			console.error("Error Getting Products: ", error.message);
+			res.status(400).send({
+				success: false,
+				message: error.message,
+			});
+		} else {
+			console.error("An Unknown Error Occurred!");
+			res.status(500).send({
+				success: false,
+				message: "Internal Server Error!",
+			});
+		}
+	}
+});
+
+// get list of categories
+router.get("/categories", async (req: Request, res: Response) => {
+	try {
+		// Use the distinct method to get unique categories
+		const categories = await ProductModel.distinct("category");
+
+		return res.status(200).send({
+			success: true,
+			categories,
+		});
+	} catch (error) {
+		if (error instanceof Error) {
+			console.error("Error Getting Categories: ", error.message);
+			res.status(400).send({
+				success: false,
+				message: error.message,
+			});
+		} else {
+			console.error("An Unknown Error Occurred!");
+			res.status(500).send({
+				success: false,
+				message: "Internal Server Error!",
+			});
+		}
+	}
+});
+
+// get list of brands
+router.get("/brands", async (req: Request, res: Response) => {
+	try {
+		// Use the distinct method to get unique brands
+		const brands = await ProductModel.distinct("brand");
+
+		return res.status(200).send({
+			success: true,
+			brands,
+		});
+	} catch (error) {
+		if (error instanceof Error) {
+			console.error("Error Getting Brands: ", error.message);
 			res.status(400).send({
 				success: false,
 				message: error.message,
