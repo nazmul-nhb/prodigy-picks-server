@@ -13,8 +13,8 @@ router.post("/", async (req: Request<{}, {}, UserDetails>, res: Response) => {
 	try {
 		const user = req.body;
 
-        // not using mongoose unique error msg because I don't want to send error as response
-        // it will destroy the user experience
+		// not using mongoose unique error msg because I don't want to send error as response
+		// it will make the user experience poor in the client side because of axios
 		// check if the user already exists in the database with the same email
 		const userExists = await UserModel.findOne({ email: user.email });
 
@@ -24,10 +24,14 @@ router.post("/", async (req: Request<{}, {}, UserDetails>, res: Response) => {
 			const savedUser = await newUser.save();
 
 			// check if the user was successfully saved
-			if (savedUser._id) {
+			if (savedUser?._id) {
 				return res
 					.status(201)
-					.send({ success: true, message: "User Saved in DB!" });
+					.send({
+						success: true,
+						insertedId: savedUser._id,
+						message: "User Saved in DB!",
+					});
 			}
 		}
 	} catch (error) {
