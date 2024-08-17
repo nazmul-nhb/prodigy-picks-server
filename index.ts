@@ -5,6 +5,7 @@ import { connectDB } from "./db/prodigyDB";
 import authRoutes from "./routes/auth";
 import userRoutes from "./routes/users";
 import productRoutes from "./routes/products";
+import cartRoutes from "./routes/carts";
 // import crypto from "node:crypto";
 
 // const secret = crypto.randomBytes(64).toString("hex");
@@ -33,6 +34,7 @@ interface ErrorObject extends Error {
 		app.use("/auth", authRoutes);
 		app.use("/users", userRoutes);
 		app.use("/products", productRoutes);
+		app.use("/carts", cartRoutes);
 
 		// root route
 		app.get("/", async (req: Request, res: Response) => {

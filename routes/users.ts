@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import { UserModel } from "../models/User";
+import UserModel from "../models/User";
 
 const router = express.Router();
 
@@ -25,13 +25,11 @@ router.post("/", async (req: Request<{}, {}, UserDetails>, res: Response) => {
 
 			// check if the user was successfully saved
 			if (savedUser?._id) {
-				return res
-					.status(201)
-					.send({
-						success: true,
-						insertedId: savedUser._id,
-						message: "User Saved in DB!",
-					});
+				return res.status(201).send({
+					success: true,
+					insertedId: savedUser._id,
+					message: "User Saved in DB!",
+				});
 			}
 		}
 	} catch (error) {
