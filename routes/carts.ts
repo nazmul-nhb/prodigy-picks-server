@@ -76,11 +76,11 @@ router.get(
 	async (req: Request<{ email: string }, {}, {}>, res: Response) => {
 		try {
 			const { email } = req.params;
-
+			// logic to prevent anyone other than the user can add anything
 			if (email !== (req as any).user?.email) {
 				return res
 					.status(403)
-					.send({success:false,  message: "Forbidden Access!" });
+					.send({ success: false, message: "Forbidden Access!" });
 			}
 			// Find cart items for the user and populate the product details
 			const cartItems = await CartModel.find({
@@ -93,9 +93,11 @@ router.get(
 				return acc + productPrice * item.quantity;
 			}, 0);
 
-			return res
-				.status(200)
-				.send({ success: true, totalPrice, cartItems });
+			return res.status(200).send({
+				success: true,
+				totalPrice: parseFloat(totalPrice.toFixed(2)),
+				cartItems,
+			});
 		} catch (error) {
 			if (error instanceof Error) {
 				console.error("Error Fetching Cart Items: ", error.message);
@@ -113,5 +115,46 @@ router.get(
 		}
 	}
 );
+
+// delete a cart item
+router.delete("/:id", verifyToken, async (req: Request, res: Response) => {
+	try {
+		const { id } = req.params;
+		const { email } = req.query;
+		// logic to prevent anyone other than the user can remove anything
+		if (email !== (req as any).user?.email) {
+			return res
+				.status(403)
+				.send({ success: false, message: "Forbidden Access!" });
+		}
+		// Find and delete the cart item by its ID
+		const result = await CartModel.findOneAndDelete({ _id: id });
+
+		if (!result) {
+			return res
+				.status(404)
+				.send({ success: false, message: "Item Not Found!" });
+		}
+
+		res.status(200).send({
+			success: true,
+			message: "Item Deleted Successfully",
+		});
+	} catch (error) {
+		if (error instanceof Error) {
+			console.error("Error Deleting Cart Items: ", error.message);
+			return res.status(400).send({
+				success: false,
+				message: error.message,
+			});
+		} else {
+			console.error("An Unknown Error Occurred!");
+			return res.status(500).send({
+				success: false,
+				message: "Internal Server Error!",
+			});
+		}
+	}
+});
 
 export default router;
