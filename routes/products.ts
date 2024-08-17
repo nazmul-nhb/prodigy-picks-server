@@ -13,7 +13,7 @@ interface ProductDetails {
 	ratings: number;
 }
 
-// create a product
+// create multiple products or a single product
 router.post(
 	"/",
 	async (
@@ -58,7 +58,7 @@ router.post(
 			}
 		}
 	}
-);;
+);
 
 // get route for all products
 router.get("/", async (req: Request, res: Response) => {
@@ -141,6 +141,34 @@ router.get("/", async (req: Request, res: Response) => {
 	} catch (error) {
 		if (error instanceof Error) {
 			console.error("Error Getting Products: ", error.message);
+			res.status(400).send({
+				success: false,
+				message: error.message,
+			});
+		} else {
+			console.error("An Unknown Error Occurred!");
+			res.status(500).send({
+				success: false,
+				message: "Internal Server Error!",
+			});
+		}
+	}
+});
+
+// get a single product by id
+router.get("/single/:id", async (req: Request, res: Response) => {
+	try {
+		const product = await ProductModel.findById(req.params.id);
+		if (product) {
+			return res.status(200).send({ success: true, product });
+		} else {
+			return res
+				.status(404)
+				.send({ success: false, message: "Product Not Found!" });
+		}
+	} catch (error) {
+		if (error instanceof Error) {
+			console.error("Error Getting Product: ", error.message);
 			res.status(400).send({
 				success: false,
 				message: error.message,
