@@ -79,10 +79,15 @@ router.get(
 				userEmail: email,
 			}).populate("products");
 
-			return res.status(200).send({
-				success: true,
-				cartItems,
-			});
+			// Calculate total price using reduce
+			const totalPrice = cartItems.reduce((acc, item) => {
+				const productPrice = (item.products as any).price;
+				return acc + productPrice * item.quantity;
+			}, 0);
+
+			return res
+				.status(200)
+				.send({ success: true, totalPrice, cartItems });
 		} catch (error) {
 			if (error instanceof Error) {
 				console.error("Error Fetching Cart Items: ", error.message);
