@@ -83,6 +83,12 @@ router.get("/", async (req: Request, res: Response) => {
 			case "date_asc":
 				sortBy = { createdAt: 1 };
 				break;
+			case "ratings_desc":
+				sortBy = { ratings: -1 };
+				break;
+			case "ratings_asc":
+				sortBy = { ratings: 1 };
+				break;
 			default:
 				sortBy = {};
 		}
