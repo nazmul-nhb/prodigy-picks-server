@@ -77,6 +77,11 @@ router.get(
 		try {
 			const { email } = req.params;
 
+			if (email !== (req as any).user?.email) {
+				return res
+					.status(403)
+					.send({success:false,  message: "Forbidden Access!" });
+			}
 			// Find cart items for the user and populate the product details
 			const cartItems = await CartModel.find({
 				userEmail: email,

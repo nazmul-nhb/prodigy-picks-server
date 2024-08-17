@@ -19,7 +19,9 @@ export const verifyToken = (
 
 	jwt.verify(token, tokenSecret, (error, decoded) => {
 		if (error) {
-			return res.status(401).send({ message: "Unauthorized Access!" });
+			return res
+				.status(401)
+				.send({ success: false, message: "Unauthorized Access!" });
 		}
 		(req as any).user = decoded as DecodedToken;
 		next();
