@@ -11,7 +11,9 @@ export const verifyToken = (
 	next: NextFunction
 ) => {
 	if (!req.headers.authorization) {
-		return res.status(401).send({ message: "Unauthorized Access!" });
+		return res
+			.status(401)
+			.send({ success: false, message: "Unauthorized Access!" });
 	}
 
 	const token = req.headers.authorization.split(" ")[1];
