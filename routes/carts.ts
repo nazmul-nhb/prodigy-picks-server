@@ -32,7 +32,7 @@ router.post(
 					return res.status(200).send({
 						success: true,
 						insertedId: savedItem._id,
-						message: "Item Appended in Your Existing Cart!",
+						message: "Item Appended in Your Cart!",
 					});
 				}
 			} else {
@@ -47,7 +47,7 @@ router.post(
 					return res.status(201).send({
 						success: true,
 						insertedId: savedItem._id,
-						message: "Item Added to Your Cart Successfully!",
+						message: "Item Added to Your Cart!",
 					});
 				}
 			}
