@@ -1,5 +1,6 @@
 import { Router, Request, Response } from "express";
 import CartModel from "../models/Cart";
+import { verifyToken } from "../middlewares/verify";
 
 const router = Router();
 
@@ -12,6 +13,7 @@ interface AddToCartRequest {
 // Add item to cart
 router.post(
 	"/",
+	verifyToken,
 	async (req: Request<{}, {}, AddToCartRequest>, res: Response) => {
 		try {
 			const { products, userEmail, quantity } = req.body;
@@ -70,6 +72,7 @@ router.post(
 // Get cart items for a user
 router.get(
 	"/:email",
+	verifyToken,
 	async (req: Request<{ email: string }, {}, {}>, res: Response) => {
 		try {
 			const { email } = req.params;

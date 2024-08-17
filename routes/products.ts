@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import ProductModel from "../models/Product";
+import { verifyToken } from "../middlewares/verify";
 
 const router = express.Router();
 
@@ -16,6 +17,7 @@ interface ProductDetails {
 // create multiple products or a single product
 router.post(
 	"/",
+	verifyToken,
 	async (
 		req: Request<{}, {}, ProductDetails | ProductDetails[]>,
 		res: Response
@@ -61,7 +63,7 @@ router.post(
 );
 
 // get route for all products
-router.get("/", async (req: Request, res: Response) => {
+router.get("/", verifyToken, async (req: Request, res: Response) => {
 	try {
 		// Pagination parameters
 		const page = parseInt(req.query.page as string) || 1;
@@ -162,7 +164,7 @@ router.get("/", async (req: Request, res: Response) => {
 });
 
 // get a single product by id
-router.get("/single/:id", async (req: Request, res: Response) => {
+router.get("/single/:id", verifyToken, async (req: Request, res: Response) => {
 	try {
 		const product = await ProductModel.findById(req.params.id);
 		if (product) {
@@ -190,7 +192,7 @@ router.get("/single/:id", async (req: Request, res: Response) => {
 });
 
 // get list of categories
-router.get("/categories", async (req: Request, res: Response) => {
+router.get("/categories", verifyToken, async (req: Request, res: Response) => {
 	try {
 		// Use the distinct method to get unique categories
 		const categories = await ProductModel.distinct("category");
@@ -217,7 +219,7 @@ router.get("/categories", async (req: Request, res: Response) => {
 });
 
 // get list of brands
-router.get("/brands", async (req: Request, res: Response) => {
+router.get("/brands", verifyToken, async (req: Request, res: Response) => {
 	try {
 		// Use the distinct method to get unique brands
 		const brands = await ProductModel.distinct("brand");
