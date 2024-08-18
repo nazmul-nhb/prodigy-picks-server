@@ -1,6 +1,4 @@
 import { Document, Schema, model } from "mongoose";
-import UserModel  from "./User";
-import ProductModel from "./Product";
 
 // Interface for cart item
 export interface CartItem extends Document {
