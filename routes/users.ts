@@ -18,19 +18,24 @@ router.post("/", async (req: Request<{}, {}, UserDetails>, res: Response) => {
 		// check if the user already exists in the database with the same email
 		const userExists = await UserModel.findOne({ email: user.email });
 
-		// if user doesn't exist, create and save the new user
-		if (!userExists) {
-			const newUser = new UserModel(user);
-			const savedUser = await newUser.save();
+		// if user exists, send an error message
+		if (userExists) {
+			return res.status(400).send({
+				success: false,
+				message: "User Already Exists!",
+			});
+		}
 
-			// check if the user was successfully saved
-			if (savedUser?._id) {
-				return res.status(201).send({
-					success: true,
-					insertedId: savedUser._id,
-					message: "User Saved in DB!",
-				});
-			}
+		const newUser = new UserModel(user);
+		const savedUser = await newUser.save();
+
+		// check if the user was successfully saved and send response
+		if (savedUser?._id) {
+			return res.status(201).send({
+				success: true,
+				insertedId: savedUser._id,
+				message: "User Saved in DB!",
+			});
 		}
 	} catch (error) {
 		if (error instanceof Error) {
