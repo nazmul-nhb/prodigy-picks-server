@@ -20,7 +20,7 @@ router.post("/", async (req: Request<{}, {}, UserDetails>, res: Response) => {
 
 		// if user exists, send an error message
 		if (userExists) {
-			return res.status(400).send({
+			return res.status(200).send({
 				success: false,
 				message: "User Already Exists!",
 			});
