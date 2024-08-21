@@ -15,7 +15,7 @@ The Prodigy Picks API is a RESTful service built with Node.js, Express, TypeScri
 ### Prerequisites
 
 - Node.js
-- MongoDB
+- MongoDB/Mongoose
 - A `.env` file for environment variables
 
 ### Setup
@@ -23,13 +23,13 @@ The Prodigy Picks API is a RESTful service built with Node.js, Express, TypeScri
 1. **Clone the repository**:
 
     ```bash
-    git clone https://github.com/nazmul-nhb/prodigy-picks-server
+    git clone https://github.com/nazmul-nhb/prodigy-picks-server.git
     ```
 
 2. **Navigate to the project directory**:
 
     ```bash
-    cd prodigy-picks-api
+    cd prodigy-picks-server
     ```
 
 3. **Install dependencies**:
@@ -41,8 +41,8 @@ The Prodigy Picks API is a RESTful service built with Node.js, Express, TypeScri
 4. **Create a `.env` file** in the root directory of the project and add your environment variables:
 
     ```env
-    MONGO_CONNECTION_STRING=your_mongo_uri
-    TOKEN_SECRET=your_secret
+    MONGO_CONNECTION_STRING=your_mongo_connection_uri
+    TOKEN_SECRET=your_secret_for_jwt
     ```
 
 5. **Start the server**:
